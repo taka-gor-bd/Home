@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লগইন - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2); /* হালকা নীল গ্রেডিয়েন্ট */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .container {
+            background-color: #ffffff; /* সাদা ব্যাকগ্রাউন্ড */
+            padding: 25px; /* প্যাডিং */
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* হালকা শ্যাডো */
+            width: 100%;
+            max-width: 340px; /* কম্প্যাক্ট প্রস্থ */
+            animation: fadeIn 0.8s ease-out;
+            position: relative; /* হেল্প আইকনের জন্য */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .help-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: #2196F3; /* নীল রঙ */
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .help-icon:hover {
+            color: #1976D2;
+            transform: scale(1.1);
+        }
+        h1 {
+            color: #2196F3; /* নীল */
+            margin-top: 20px; /* আইকনের জন্য মার্জিন */
+            margin-bottom: 25px;
+            font-size: 2em; /* ফন্ট সাইজ */
+        }
+        .form-group {
+            margin-bottom: 12px; /* ইনপুট ফিল্ডের মধ্যে কম গ্যাপ */
+            text-align: center; /* সেন্টারে রাখার জন্য */
+        }
+        .form-group input {
+            width: calc(100% - 20px); /* প্যাডিং বাদ দিতে */
+            padding: 10px; /* প্যাডিং */
+            border: 1px solid #ddd;
+            border-radius: 8px; /* বর্ডার রেডিয়াস */
+            font-size: 0.95em; /* ফন্ট সাইজ */
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            height: 40px; /* ইনপুট বক্সের উচ্চতা কমানো */
+        }
+        .form-group input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+        .bottom-link-container {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .bottom-link-container .link {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s ease;
+            display: inline;
+        }
+        .bottom-link-container .link:hover {
+            color: #1976D2;
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85em;
+            margin-top: 10px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="help_center.html" class="help-icon" title="হেল্প সেন্টার"><i class="fas fa-question-circle"></i></a>
+        <h1>লগইন করুন</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="text" id="identifier" placeholder="ইমেল বা ফোন নম্বর" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="পাসওয়ার্ড" required>
+            </div>
+            <div class="bottom-link-container">
+                <a href="forgot_password.html" class="link">পাসওয়ার্ড ভুলে গেছেন?</a>
+            </div>
+            <button type="submit">লগইন করুন</button>
+            <p id="loginErrorMessage" class="error-message" style="display: none;"></p>
+        </form>
+        <div class="bottom-link-container">
+            অ্যাকাউন্ট নেই? <a href="register.html" class="link">রেজিস্ট্রেশন করুন</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const loginErrorMessage = document.getElementById('loginErrorMessage');
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const identifier = document.getElementById('identifier').value.trim();
+            const password = document.getElementById('password').value;
+            loginErrorMessage.style.display = 'none'; 
+
+            let authEmailToUse = identifier;
+            let isEmail = identifier.includes('@'); 
+
+            if (!isEmail) {
+                const q = query(collection(db, "users"), where("phone", "==", identifier));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const userData = querySnapshot.docs[0].data();
+                    if (userData.email) { 
+                        authEmailToUse = userData.email;
+                    } else { 
+                        authEmailToUse = `${identifier.replace(/\D/g, '')}@yourdomain.com`; // IMPORTANT: Replace 'yourdomain.com'
+                    }
+                } else {
+                    loginErrorMessage.innerText = 'এই আইডিটি নিবন্ধিত নয়। অনুগ্রহ করে রেজিস্ট্রেশন করুন।';
+                    loginErrorMessage.style.display = 'block';
+                    return;
+                }
+            }
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, authEmailToUse, password);
+                const user = userCredential.user;
+
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData.isFirstLogin) {
+                        window.location.href = 'dashboard.html?showWelcomeBonus=true'; 
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+
+            } catch (error) {
+                console.error("লগইন ত্রুটি:", error.message);
+                let errorMessageText = 'লগইন ব্যর্থ হয়েছে। অনুগ্রহ করে আইডি ও পাসওয়ার্ড পরীক্ষা করুন।';
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessageText = 'ভুল আইডি বা পাসওয়ার্ড।';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessageText = 'বৈধ আইডি (ইমেল বা ফোন নম্বর) প্রবেশ করান।';
+                }
+                
+                loginErrorMessage.innerText = errorMessageText;
+                loginErrorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
