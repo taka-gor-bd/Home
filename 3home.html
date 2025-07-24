@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ড্যাশবোর্ড - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden; /* অনুভূমিক স্ক্রলবার লুকানো */
+        }
+        .header {
+            background-color: #2196F3; /* নীল */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px; /* মোবাইল ফ্রেন্ডলি প্রস্থ */
+            margin: 0 auto;
+        }
+        .balance-card {
+            background-color: #4CAF50; /* সবুজ */
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative; /* লাইট ইফেক্টের জন্য */
+            overflow: hidden;
+        }
+        /* লাইট ইফেক্ট */
+        .light-effect-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+        .light-dot {
+            position: absolute;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: pulseLight 2s infinite alternate, moveLight 10s linear infinite;
+        }
+        .light-dot:nth-child(1) { width: 30px; height: 30px; top: 10%; left: 5%; animation-delay: 0s; }
+        .light-dot:nth-child(2) { width: 25px; height: 25px; top: 25%; right: 10%; animation-delay: 0.5s; }
+        .light-dot:nth-child(3) { width: 35px; height: 35px; bottom: 15%; left: 20%; animation-delay: 1s; }
+        .light-dot:nth-child(4) { width: 20px; height: 20px; top: 40%; right: 25%; animation-delay: 1.5s; }
+        .light-dot:nth-child(5) { width: 40px; height: 40px; bottom: 5%; right: 5%; animation-delay: 2s; }
+        
+        @keyframes pulseLight {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0.7; }
+        }
+        @keyframes moveLight {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, 10px); }
+            50% { transform: translate(0, 20px); }
+            75% { transform: translate(20px, 10px); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        .balance-card h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        .balance-card .amount {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .referral-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: left;
+            border: 1px solid #eee;
+        }
+        .referral-card h3 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        .referral-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .referral-code-display {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #555;
+            word-break: break-all; /* For long codes */
+            flex-grow: 1;
+        }
+        .referral-copy-button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-left: 10px;
+        }
+        .referral-copy-button:hover {
+            background-color: #1976D2;
+        }
+        .referral-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 15px;
+            border-top: 1px dashed #eee;
+            padding-top: 15px;
+        }
+        .stat-item {
+            font-size: 0.95em;
+            color: #777;
+        }
+        .stat-item span {
+            display: block;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Responsive grid */
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .quick-access-item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .quick-access-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        .quick-access-item i {
+            font-size: 2.2em;
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+        .quick-access-item span {
+            display: block;
+            font-size: 0.95em;
+            font-weight: 700;
+        }
+
+        .latest-activities-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: left;
+            border: 1px solid #eee;
+        }
+        .latest-activities-card h3 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .activity-item {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .activity-item strong {
+            color: #333;
+        }
+        .activity-item .date {
+            font-size: 0.85em;
+            color: #999;
+        }
+        .no-activities {
+            color: #777;
+            font-style: italic;
+        }
+
+
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+
+        /* পপ-আপ স্টাইল (ওয়েলকাম বোনাস) */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 320px;
+            width: 90%;
+            position: relative;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .popup-content h2 {
+            color: #4CAF50;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        .popup-content p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .popup-content .bonus-amount {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #2196F3; /* নীল */
+            margin: 15px 0;
+        }
+        .popup-content .close-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .popup-content .close-btn:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        স্বাগতম!
+    </div>
+
+    <div class="main-content">
+        <div class="balance-card">
+            <div class="light-effect-container">
+                <div class="light-dot"></div>
+                <div class="light-dot"></div>
+                <div class="light-dot"></div>
+                <div class="light-dot"></div>
+                <div class="light-dot"></div>
+            </div>
+            <h2>আপনার বর্তমান ব্যালেন্স</h2>
+            <p class="amount" id="userBalance">৳ 0.00</p>
+        </div>
+
+        <div class="referral-card">
+            <h3>আপনার রেফারেল</h3>
+            <div class="referral-info">
+                <span class="referral-code-display" id="userReferralCode">লোড হচ্ছে...</span>
+                <button class="referral-copy-button" id="copyReferralButton"><i class="fas fa-copy"></i> কপি</button>
+            </div>
+            <div class="referral-stats">
+                <div class="stat-item">
+                    <span id="totalReferrals">0</span> জন
+                    <p>মোট রেফারেল</p>
+                </div>
+                <div class="stat-item">
+                    <span id="referralEarnings">৳ 0.00</span>
+                    <p>রেফারেল আয়</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2>দ্রুত অ্যাক্সেস</h2>
+            <div class="quick-access-grid">
+                <a href="plans.html" class="quick-access-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>প্ল্যানস</span>
+                </a>
+                <a href="deposit.html" class="quick-access-item">
+                    <i class="fas fa-wallet"></i>
+                    <span>ডিপোজিট</span>
+                </a>
+                <a href="withdraw.html" class="quick-access-item">
+                    <i class="fas fa-money-bill-transfer"></i>
+                    <span>উইথড্র</span>
+                </a>
+                <a href="lottery.html" class="quick-access-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>ঘণ্টা লটারি</span>
+                </a>
+                <a href="spin_lottery.html" class="quick-access-item">
+                    <i class="fas fa-hand-pointer"></i>
+                    <span>স্পিন লটারি</span>
+                </a>
+                <a href="mission_game.html" class="quick-access-item">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <span>মিশন গেম</span>
+                </a>
+                <a href="redeem_code.html" class="quick-access-item">
+                    <i class="fas fa-gift"></i>
+                    <span>রিডিম কোড</span>
+                </a>
+                <a href="donate.html" class="quick-access-item">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>ডোনেট</span>
+                </a>
+                <a href="promotion_kit.html" class="quick-access-item">
+                    <i class="fas fa-share-alt"></i>
+                    <span>প্রোমোশন কিট</span>
+                </a>
+                <a href="faqs.html" class="quick-access-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQ</span>
+                </a>
+                <a href="about.html" class="quick-access-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>আমাদের সম্পর্কে</span>
+                </a>
+                <a href="help_center.html" class="quick-access-item">
+                    <i class="fas fa-headset"></i>
+                    <span>হেল্প সেন্টার</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="latest-activities-card">
+            <h3>সাম্প্রতিক কার্যকলাপ</h3>
+            <ul id="recentActivitiesList">
+                <p class="no-activities">কোনো সাম্প্রতিক কার্যকলাপ নেই।</p>
+                </ul>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="welcomeBonusPopup" style="display: none;">
+        <div class="popup-content">
+            <h2>অভিনন্দন! 🎉</h2>
+            <p>আপনার রেজিস্ট্রেশন সফল হয়েছে!</p>
+            <p>আপনার অ্যাকাউন্টে যুক্ত হয়েছে:</p>
+            <p class="bonus-amount">৳ <span id="welcomeBonusAmount">50.00</span></p>
+            <button class="close-btn" onclick="closeWelcomePopup()">ড্যাশবোর্ড দেখুন</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item active" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, query, where, orderBy, limit, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // UI Elements
+        const userBalanceSpan = document.getElementById('userBalance');
+        const userReferralCodeSpan = document.getElementById('userReferralCode');
+        const totalReferralsSpan = document.getElementById('totalReferrals');
+        const referralEarningsSpan = document.getElementById('referralEarnings');
+        const copyReferralButton = document.getElementById('copyReferralButton');
+        const recentActivitiesList = document.getElementById('recentActivitiesList');
+        const welcomeBonusPopup = document.getElementById('welcomeBonusPopup');
+        const welcomeBonusAmount = document.getElementById('welcomeBonusAmount');
+
+        let currentUser = null;
+        let currentUserData = null;
+
+        // --- Firebase Auth & User Data Loading ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance ? currentUserData.balance.toFixed(2) : '0.00'}`;
+                    
+                    // Display Referral Code
+                    const referralCode = currentUserData.referralCode || user.uid.substring(0,8).toUpperCase();
+                    userReferralCodeSpan.innerText = referralCode;
+
+                    // Load Referral Stats (using real-time listener for better updates)
+                    loadReferralStatsRealtime(user.uid);
+
+                    // Load Recent Activities (using real-time listener)
+                    loadRecentActivitiesRealtime(user.uid);
+
+                    // Show welcome bonus popup if it's the first login
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.get('showWelcomeBonus') === 'true' && currentUserData.isFirstLogin) {
+                        welcomeBonusAmount.innerText = currentUserData.balance ? currentUserData.balance.toFixed(2) : '0.00'; 
+                        welcomeBonusPopup.classList.add('active'); // Use class for animation
+                        // Update isFirstLogin to false to prevent showing again
+                        await updateDoc(userDocRef, { isFirstLogin: false });
+                    }
+
+                } else {
+                    console.log("No user data found in Firestore.");
+                    window.location.href = 'login.html'; // Redirect if data not found
+                }
+            } else {
+                window.location.href = 'login.html'; // Redirect if not authenticated
+            }
+        });
+
+        // --- Welcome Bonus Popup Control ---
+        window.closeWelcomePopup = function() {
+            welcomeBonusPopup.classList.remove('active');
+            // Clear the URL parameter so it doesn't show on subsequent visits
+            const url = new URL(window.location.href);
+            url.searchParams.delete('showWelcomeBonus');
+            window.history.replaceState({}, document.title, url.toString());
+        };
+
+        // --- Referral Stats (Real-time) ---
+        async function loadReferralStatsRealtime(userId) {
+            // Listen to changes in users collection where 'referredBy' matches this user's ID
+            const q = query(collection(db, "users"), where("referredBy", "==", userId));
+            onSnapshot(q, (snapshot) => {
+                totalReferralsSpan.innerText = snapshot.size;
+
+                let totalReferralBonus = 0;
+                // You might need to query 'transactions' specifically for referral bonuses
+                // For simplicity, let's calculate based on fixed amount per referral
+                // (Server-side calculation is more robust)
+                totalReferralBonus = snapshot.size * 20; // Example: 20 per referral
+                referralEarningsSpan.innerText = `৳ ${totalReferralBonus.toFixed(2)}`;
+            }, (error) => {
+                console.error("রেফারেল ডেটা লোড করতে ত্রুটি:", error);
+                totalReferralsSpan.innerText = "N/A";
+                referralEarningsSpan.innerText = "৳ N/A";
+            });
+        }
+
+        // --- Copy Referral Code ---
+        copyReferralButton.addEventListener('click', () => {
+            const referralCode = userReferralCodeSpan.innerText;
+            navigator.clipboard.writeText(referralCode).then(() => {
+                alert('রেফারেল কোড কপি হয়েছে: ' + referralCode);
+            }).catch(err => {
+                console.error('কপি করতে ব্যর্থ:', err);
+                alert('রেফারেল কোড কপি করতে সমস্যা হয়েছে।');
+            });
+        });
+
+        // --- Recent Activities (Real-time) ---
+        async function loadRecentActivitiesRealtime(userId) {
+            recentActivitiesList.innerHTML = '<p class="no-activities">কার্যকলাপ লোড হচ্ছে...</p>';
+            // Listen to user's recent transactions
+            const q = query(
+                collection(db, "transactions"),
+                where("userId", "==", userId),
+                orderBy("timestamp", "desc"),
+                limit(5)
+            );
+            onSnapshot(q, (snapshot) => {
+                recentActivitiesList.innerHTML = '';
+                if (snapshot.empty) {
+                    recentActivitiesList.innerHTML = '<p class="no-activities">কোনো সাম্প্রতিক কার্যকলাপ নেই।</p>';
+                    return;
+                }
+
+                snapshot.forEach(docData => {
+                    const data = docData.data();
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('activity-item');
+                    const activityDate = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('bn-BD', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : 'N/A';
+                    
+                    let activityText = '';
+                    switch (data.type) {
+                        case 'deposit':
+                            activityText = `আপনি <strong>৳${data.amount.toFixed(2)}</strong> ডিপোজিট করেছেন।`;
+                            break;
+                        case 'withdraw_request': // Changed from 'withdraw' to 'withdraw_request' for clarity
+                            activityText = `আপনি <strong>৳${data.amount.toFixed(2)}</strong> উইথড্র রিকোয়েস্ট করেছেন।`;
+                            break;
+                        case 'lottery_win':
+                            activityText = `ঘণ্টা লটারিতে <strong>৳${data.prizeAmount.toFixed(2)}</strong> জিতেছেন।`;
+                            break;
+                        case 'spin_lottery_win':
+                            activityText = `স্পিন লটারিতে <strong>৳${data.prizeAmount.toFixed(2)}</strong> জিতেছেন।`;
+                            break;
+                        case 'mission_reward':
+                            activityText = `মিশন গেম থেকে <strong>৳${data.amount.toFixed(2)}</strong> আয় করেছেন।`;
+                            break;
+                        case 'plan_purchase':
+                            activityText = `আপনি <strong>${data.planName}</strong> প্ল্যান কিনেছেন।`;
+                            break;
+                        case 'donation':
+                            activityText = `আপনি <strong>৳${data.amount.toFixed(2)}</strong> ডোনেট করেছেন।`;
+                            break;
+                        case 'redeem_bonus':
+                            activityText = `রিডিম কোড থেকে <strong>৳${data.amount.toFixed(2)}</strong> বোনাস পেয়েছেন।`;
+                            break;
+                        // Add more activity types as needed
+                        default:
+                            activityText = `একটি কার্যকলাপ হয়েছে: <strong>৳${data.amount ? data.amount.toFixed(2) : 'N/A'}</strong>`;
+                    }
+
+                    listItem.innerHTML = `${activityText} <br><span class="date">${activityDate}</span>`;
+                    recentActivitiesList.appendChild(listItem);
+                });
+            }, (error) => {
+                console.error("সাম্প্রতিক কার্যকলাপ লোড করতে ত্রুটি:", error);
+                recentActivitiesList.innerHTML = '<p class="no-activities" style="color: #ff5252;">কার্যকলাপ লোড করতে সমস্যা হয়েছে।</p>';
+            });
+        }
+
+
+        // --- Navigation ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('navDashboard').classList.add('active');
+        });
+    </script>
+</body>
+</html>

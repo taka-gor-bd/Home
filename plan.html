@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্ল্যানস - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+        }
+        .header {
+            background-color: #2196F3; /* নীল */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .plans-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column for mobile */
+            gap: 20px;
+        }
+        .plan-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+        .plan-card:hover {
+            transform: translateY(-5px);
+        }
+        .plan-card.free {
+            border: 2px solid #4CAF50; /* Green border for free plan */
+        }
+        .plan-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        .plan-card .plan-details {
+            padding: 20px;
+        }
+        .plan-card h3 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .plan-card p {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .plan-card .price {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #4CAF50; /* Green for price */
+            margin: 15px 0;
+        }
+        .plan-card .price.free-text {
+            color: #4CAF50;
+            font-size: 1.5em;
+        }
+        .plan-card button {
+            background-color: #FF9800; /* কমলা */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        .plan-card button:hover {
+            background-color: #fb8c00;
+            transform: translateY(-2px);
+        }
+        .plan-card button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* বটম নেভিগেশন বার - ড্যাশবোর্ড থেকে কপি করা */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        ইনকাম প্ল্যানস
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>আমাদের ইনকাম প্ল্যানসমূহ</h2>
+            <div class="plans-grid" id="plansGrid">
+                <div class="plan-card free" data-plan-id="free-plan">
+                    <img src="https://via.placeholder.com/400x150/4CAF50/FFFFFF?text=Free+Plan" alt="Free Plan Image">
+                    <div class="plan-details">
+                        <h3>ফ্রি প্ল্যান</h3>
+                        <p>মেয়াদ: ৭ দিন</p>
+                        <p>দৈনিক আয়: ৳ ১০</p>
+                        <p>মোট আয় (৭ দিনে): ৳ ৭০</p>
+                        <p class="price free-text">বিনামূল্যে</p>
+                        <button class="buy-plan-btn" data-plan-id="free-plan" data-plan-price="0" data-plan-daily-income="10" data-plan-duration="7" data-plan-type="free">
+                            সক্রিয় করুন
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plan-card" data-plan-id="basic-plan">
+                    <img src="https://via.placeholder.com/400x150/FFC107/FFFFFF?text=Basic+Plan" alt="Basic Plan Image">
+                    <div class="plan-details">
+                        <h3>বেসিক প্ল্যান</h3>
+                        <p>মেয়াদ: ৩০ দিন</p>
+                        <p>দৈনিক আয়: ৳ ২০</p>
+                        <p>মোট আয় (৩০ দিনে): ৳ ৬০০</p>
+                        <p class="price">৳ ৫০০</p>
+                        <button class="buy-plan-btn" data-plan-id="basic-plan" data-plan-price="500" data-plan-daily-income="20" data-plan-duration="30" data-plan-type="paid">
+                            কিনুন
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plan-card" data-plan-id="premium-plan">
+                    <img src="https://via.placeholder.com/400x150/9C27B0/FFFFFF?text=Premium+Plan" alt="Premium Plan Image">
+                    <div class="plan-details">
+                        <h3>প্রিমিয়াম প্ল্যান</h3>
+                        <p>মেয়াদ: ৯০ দিন</p>
+                        <p>দৈনিক আয়: ৳ ৭০</p>
+                        <p>মোট আয় (৯০ দিনে): ৳ ৬৩০০</p>
+                        <p class="price">৳ ২,০০০</p>
+                        <button class="buy-plan-btn" data-plan-id="premium-plan" data-plan-price="2000" data-plan-daily-income="70" data-plan-duration="90" data-plan-type="paid">
+                            কিনুন
+                        </button>
+                    </div>
+                </div>
+
+                </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item active" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, arrayUnion, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const functions = getFunctions(app, 'asia-southeast1'); // Specify your Cloud Functions region
+
+        let currentUserData = null; // To store current user's data
+        let currentUserId = null;
+
+        // Load user data on page load
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    console.log("User data loaded:", currentUserData);
+                    checkFreePlanStatus(); // Check if free plan is already active or used
+                } else {
+                    console.error("ইউজার ডেটা খুঁজে পাওয়া যায়নি।");
+                    alert("আপনার তথ্য লোড করতে সমস্যা হয়েছে।");
+                    window.location.href = 'login.html';
+                }
+            } else {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        async function checkFreePlanStatus() {
+            const freePlanBtn = document.querySelector('.plan-card.free .buy-plan-btn');
+            if (currentUserData && currentUserData.activePlans) {
+                const freePlanActive = currentUserData.activePlans.some(plan => plan.planId === 'free-plan');
+                if (freePlanActive) {
+                    freePlanBtn.innerText = "ইতিমধ্যে সক্রিয়";
+                    freePlanBtn.disabled = true;
+                }
+            }
+        }
+
+        // Handle buy plan button click
+        document.getElementById('plansGrid').addEventListener('click', async (e) => {
+            if (e.target.classList.contains('buy-plan-btn')) {
+                const button = e.target;
+                const planId = button.dataset.planId;
+                const planPrice = parseFloat(button.dataset.planPrice);
+                const planDailyIncome = parseFloat(button.dataset.planDailyIncome);
+                const planDuration = parseInt(button.dataset.planDuration);
+                const planType = button.dataset.planType;
+
+                if (!currentUserId || !currentUserData) {
+                    alert("লগইন করা নেই বা ব্যবহারকারীর তথ্য লোড হয়নি।");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                if (planType === 'free') {
+                    // Check if free plan already activated
+                    if (currentUserData.activePlans && currentUserData.activePlans.some(plan => plan.planId === 'free-plan')) {
+                        alert('আপনি ইতিমধ্যেই বিনামূল্যে প্ল্যানটি সক্রিয় করেছেন।');
+                        button.innerText = "ইতিমধ্যে সক্রিয়";
+                        button.disabled = true;
+                        return;
+                    }
+                } else { // Paid plan
+                    if (currentUserData.balance < planPrice) {
+                        alert('আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই। অনুগ্রহ করে ডিপোজিট করুন।');
+                        return;
+                    }
+                }
+
+                if (confirm(`আপনি কি "${planId === 'free-plan' ? 'ফ্রি প্ল্যান' : planId.replace('-', ' ').toUpperCase()} টি ${planType === 'free' ? 'সক্রিয় করতে' : 'কিনতে'} চান? খরচ: ৳${planPrice.toFixed(2)}`)) {
+                    try {
+                        // Use Cloud Function for secure purchase logic
+                        const purchasePlan = httpsCallable(functions, 'purchasePlan');
+                        const result = await purchasePlan({ 
+                            planId: planId, 
+                            planPrice: planPrice,
+                            planDailyIncome: planDailyIncome,
+                            planDuration: planDuration,
+                            planType: planType
+                        });
+
+                        if (result.data.success) {
+                            alert(result.data.message);
+                            // Update UI balance if it was a paid plan
+                            if (planType !== 'free') {
+                                currentUserData.balance -= planPrice; // Update local data
+                                // In a real app, you'd re-fetch user data or rely solely on server updates
+                            }
+                            if (planType === 'free') {
+                                button.innerText = "ইতিমধ্যে সক্রিয়";
+                                button.disabled = true;
+                            }
+                            // Optionally, redirect to dashboard or transactions
+                            // window.location.href = 'dashboard.html';
+                        } else {
+                            alert(`প্ল্যান কেনা ব্যর্থ: ${result.data.message}`);
+                        }
+                    } catch (error) {
+                        console.error("প্ল্যান কেনার ত্রুটি:", error.message);
+                        alert(`প্ল্যান কেনা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন। ত্রুটি: ${error.message}`);
+                    }
+                }
+            }
+        });
+
+        // Highlight active navigation item
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('navPlans').classList.add('active');
+        });
+    </script>
+</body>
+</html>

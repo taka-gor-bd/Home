@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডোনেট - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .balance-display {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .donate-box-preview {
+            background-color: #e8f5e9; /* হালকা সবুজ */
+            border: 2px dashed #a5d6a7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden; /* Ensure content stays within bounds */
+        }
+        .donate-box-preview .preview-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #388e3c; /* গাঢ় সবুজ */
+            margin-bottom: 5px;
+        }
+        .donate-box-preview .preview-amount {
+            font-size: 2.2em;
+            font-weight: 900;
+            color: #2e7d32; /* আরও গাঢ় সবুজ */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .donate-form .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .donate-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+        }
+        .donate-form .form-group input[type="text"],
+        .donate-form .form-group input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .donate-form .form-group input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+        }
+        .private-donate-option {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .private-donate-option input[type="checkbox"] {
+            margin-right: 10px;
+            width: auto;
+            height: auto;
+        }
+        .private-donate-option label {
+            font-size: 0.95em;
+            color: #555;
+            cursor: pointer;
+        }
+        button[type="submit"] {
+            background-color: #FF9800; /* কমলা */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #fb8c00;
+            transform: translateY(-3px);
+        }
+        button[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        ডোনেট করুন
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>আমাদের ডোনেশন ফান্ডে অবদান রাখুন</h2>
+            <p class="balance-display">আপনার ব্যালেন্স: <span id="userBalance">৳ 0.00</span></p>
+            
+            <div class="donate-box-preview">
+                <p class="preview-name" id="previewName">আপনার নাম</p>
+                <p class="preview-amount">৳ <span id="previewAmount">0</span></p>
+            </div>
+
+            <form id="donateForm">
+                <div class="form-group">
+                    <label for="donateName">আপনার নাম (যেমন দেখতে চান):</label>
+                    <input type="text" id="donateName" placeholder="নাম অথবা আইডি" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="donateAmount">পরিমাণ (সর্বনিম্ন ৳10):</label>
+                    <input type="number" id="donateAmount" placeholder="৳ 10" min="10" required>
+                </div>
+                <div class="private-donate-option">
+                    <input type="checkbox" id="anonymousDonate">
+                    <label for="anonymousDonate">গোপনে ডোনেট করুন (নাম প্রকাশ হবে না)</label>
+                </div>
+                <button type="submit" id="donateButton">ডোনেট করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const functions = getFunctions(app, 'asia-southeast1'); // Specify your Cloud Functions region
+
+        // UI Elements
+        const userBalanceSpan = document.getElementById('userBalance');
+        const donateNameInput = document.getElementById('donateName');
+        const donateAmountInput = document.getElementById('donateAmount');
+        const anonymousDonateCheckbox = document.getElementById('anonymousDonate');
+        const previewNameSpan = document.getElementById('previewName');
+        const previewAmountSpan = document.getElementById('previewAmount');
+        const donateButton = document.getElementById('donateButton');
+
+        let currentUser = null;
+        let currentUserData = null;
+
+        // Cloud Function Callable
+        const makeDonationCallable = httpsCallable(functions, 'makeDonation');
+
+        // --- Firebase Auth & User Data Loading ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance ? currentUserData.balance.toFixed(2) : '0.00'}`;
+                    // Set default name to user's phone if available
+                    donateNameInput.value = currentUserData.phone || `ইউজার ${user.uid.substring(0, 6)}`;
+                    updatePreview(); // Update preview with default name
+                } else {
+                    alert("আপনার তথ্য লোড করতে সমস্যা হয়েছে।");
+                    window.location.href = 'login.html';
+                }
+            } else {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // --- Live Preview Logic ---
+        function updatePreview() {
+            const amount = donateAmountInput.value || '0';
+            const isAnonymous = anonymousDonateCheckbox.checked;
+            const name = donateNameInput.value.trim();
+
+            previewAmountSpan.innerText = amount;
+            if (isAnonymous) {
+                previewNameSpan.innerText = "গোপন দাতা";
+            } else {
+                previewNameSpan.innerText = name || "আপনার নাম";
+            }
+        }
+
+        donateNameInput.addEventListener('input', updatePreview);
+        donateAmountInput.addEventListener('input', updatePreview);
+        anonymousDonateCheckbox.addEventListener('change', updatePreview);
+
+        // --- Donation Submission Logic ---
+        donateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const donateAmount = parseFloat(donateAmountInput.value);
+            const donateName = donateNameInput.value.trim();
+            const isAnonymous = anonymousDonateCheckbox.checked;
+
+            if (isNaN(donateAmount) || donateAmount < 10) {
+                alert('অনুগ্রহ করে বৈধ ডোনেশন পরিমাণ লিখুন (সর্বনিম্ন ৳10)।');
+                return;
+            }
+            if (!isAnonymous && donateName === '') {
+                alert('ডোনেট করার জন্য আপনার নাম লিখুন অথবা "গোপনে ডোনেট করুন" অপশনটি নির্বাচন করুন।');
+                return;
+            }
+            if (currentUserData.balance < donateAmount) {
+                alert('আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।');
+                return;
+            }
+
+            donateButton.disabled = true; // Disable button to prevent multiple submissions
+
+            try {
+                // Call Cloud Function to process donation
+                const result = await makeDonationCallable({
+                    amount: donateAmount,
+                    donorName: isAnonymous ? "গোপন দাতা" : donateName,
+                    isAnonymous: isAnonymous
+                });
+
+                if (result.data.success) {
+                    alert(`আপনার ৳${donateAmount.toFixed(2)} ডোনেশন সফল হয়েছে!`);
+                    currentUserData.balance = result.data.newBalance; // Update local balance
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance.toFixed(2)}`;
+                    
+                    // Reset form and preview
+                    donateForm.reset();
+                    donateNameInput.value = currentUserData.phone || `ইউজার ${currentUser.uid.substring(0, 6)}`; // Reset to default
+                    updatePreview();
+                    
+                    // Optional: Redirect to a donation history page or dashboard
+                    // window.location.href = 'dashboard.html';
+                } else {
+                    alert(`ডোনেশন ব্যর্থ: ${result.data.message}`);
+                }
+            } catch (error) {
+                console.error("ডোনেশন ত্রুটি:", error);
+                alert(`ডোনেশন করতে সমস্যা হয়েছে: ${error.message}`);
+            } finally {
+                donateButton.disabled = false; // Re-enable button
+            }
+        });
+
+        // --- Navigation ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            // If you add a Donate button to bottom nav and give it id 'navDonate'
+            // document.getElementById('navDonate').classList.add('active');
+        });
+    </script>
+</body>
+</html>

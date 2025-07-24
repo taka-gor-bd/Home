@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রেজিস্ট্রেশন - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2); /* হালকা নীল গ্রেডিয়েন্ট (আগের থিম) */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            overflow: hidden; /* স্ক্রলবার লুকানো */
+        }
+        .container {
+            background-color: #ffffff; /* সাদা ব্যাকগ্রাউন্ড */
+            padding: 25px; /* প্যাডিং */
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* হালকা শ্যাডো */
+            width: 100%;
+            max-width: 340px; /* আরও কম্প্যাক্ট প্রস্থ */
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #2196F3; /* নীল */
+            margin-bottom: 25px;
+            font-size: 2em; /* ফন্ট সাইজ */
+        }
+        .form-group {
+            margin-bottom: 12px; /* ইনপুট ফিল্ডের মধ্যে কম গ্যাপ */
+            text-align: center; /* সেন্টারে রাখার জন্য */
+        }
+        .form-group input {
+            width: calc(100% - 20px); /* প্যাডিং বাদ দিতে */
+            padding: 10px; /* প্যাডিং */
+            border: 1px solid #ddd;
+            border-radius: 8px; /* বর্ডার রেডিয়াস */
+            font-size: 0.95em; /* ফন্ট সাইজ */
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            height: 40px; /* ইনপুট বক্সের উচ্চতা কমানো */
+        }
+        .form-group input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+        }
+        button {
+            background-color: #4CAF50; /* সবুজ */
+            color: white;
+            padding: 12px 25px; /* প্যাডিং */
+            border: none;
+            border-radius: 8px;
+            font-size: 1em; /* ফন্ট সাইজ */
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+        .bottom-link-container {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .bottom-link-container .link {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s ease;
+            display: inline;
+        }
+        .bottom-link-container .link:hover {
+            color: #1976D2;
+            text-decoration: underline;
+        }
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            justify-content: center;
+            font-size: 0.85em;
+        }
+        .terms-checkbox input[type="checkbox"] {
+            margin-right: 6px;
+            width: auto;
+            height: auto;
+            accent-color: #2196F3; /* চেকবক্সের রঙ */
+        }
+        .terms-checkbox label {
+            font-weight: 400;
+            color: #666;
+        }
+        .terms-checkbox a {
+            color: #2196F3;
+            text-decoration: none;
+            margin-left: 3px;
+        }
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85em;
+            margin-top: 10px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>নতুন অ্যাকাউন্ট খুলুন</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <input type="text" id="name" placeholder="আপনার পুরো নাম" required>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" placeholder="ইমেল অ্যাড্রেস (ঐচ্ছিক)">
+            </div>
+            <div class="form-group">
+                <input type="tel" id="phone" placeholder="ফোন নম্বর (ঐচ্ছিক)">
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="পাসওয়ার্ড" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="confirmPassword" placeholder="পাসওয়ার্ড নিশ্চিত করুন" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="referral" placeholder="রেফার কোড (ঐচ্ছিক)">
+            </div>
+            <div class="terms-checkbox">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">আমি <a href="terms.html">শর্তাবলী ও নিয়মাবলী</a> পড়েছি ও সম্মত হয়েছি।</label>
+            </div>
+            <button type="submit">রেজিস্ট্রেশন করুন</button>
+            <p id="registrationErrorMessage" class="error-message" style="display: none;"></p>
+        </form>
+        <div class="bottom-link-container">
+            ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="login.html" class="link">লগইন করুন</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const registrationErrorMessage = document.getElementById('registrationErrorMessage');
+
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const referral = document.getElementById('referral').value.trim();
+            const termsAccepted = document.getElementById('terms').checked;
+
+            registrationErrorMessage.style.display = 'none'; 
+
+            if (password !== confirmPassword) {
+                registrationErrorMessage.innerText = 'পাসওয়ার্ড মেলেনি!';
+                registrationErrorMessage.style.display = 'block';
+                return;
+            }
+            if (!termsAccepted) {
+                registrationErrorMessage.innerText = 'শর্তাবলী ও নিয়মাবলী অবশ্যই গ্রহণ করতে হবে!';
+                registrationErrorMessage.style.display = 'block';
+                return;
+            }
+            if (!email && !phone) {
+                registrationErrorMessage.innerText = 'রেজিস্ট্রেশনের জন্য ইমেল অথবা ফোন নম্বর যেকোনো একটি অবশ্যই দিতে হবে!';
+                registrationErrorMessage.style.display = 'block';
+                return;
+            }
+
+            let authEmailToUse = email;
+            if (!email && phone) { // If only phone is provided
+                authEmailToUse = `${phone.replace(/\D/g, '')}@yourdomain.com`; // IMPORTANT: Replace 'yourdomain.com' with your actual domain
+            } else if (email && !phone) { // If only email is provided
+                authEmailToUse = email;
+            } else if (email && phone) { // If both are provided, prioritize email for auth
+                authEmailToUse = email;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, authEmailToUse, password);
+                const user = userCredential.user;
+
+                let userDataForFirestore = {
+                    name: name,
+                    referralCode: user.uid.substring(0,8).toUpperCase(), 
+                    balance: 50, 
+                    isFirstLogin: true, 
+                    createdAt: new Date()
+                };
+
+                if (email) userDataForFirestore.email = email;
+                if (phone) userDataForFirestore.phone = phone;
+
+                if (referral) {
+                    const referrerQuery = query(collection(db, "users"), where("referralCode", "==", referral.toUpperCase()));
+                    const referrerSnapshot = await getDocs(referrerQuery);
+                    if (!referrerSnapshot.empty) {
+                        userDataForFirestore.referredBy = referrerSnapshot.docs[0].id; 
+                    } else {
+                        registrationErrorMessage.innerText = 'আপনার দেওয়া রেফার কোডটি ভুল।';
+                        registrationErrorMessage.style.display = 'block';
+                    }
+                }
+
+                await setDoc(doc(db, "users", user.uid), userDataForFirestore);
+
+                alert('রেজিস্ট্রেশন সফল হয়েছে! আপনার অ্যাকাউন্টে ৫০ টাকা বোনাস যোগ করা হয়েছে।');
+                window.location.href = 'dashboard.html?showWelcomeBonus=true'; 
+            } catch (error) {
+                console.error("রেজিস্ট্রেশন ত্রুটি:", error.message);
+                let errorMessageText = 'রেজিস্ট্রেশন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessageText = 'এই আইডি (ইমেল/ফোন) দিয়ে ইতিমধ্যেই একটি অ্যাকাউন্ট আছে।';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessageText = 'পাসওয়ার্ড খুব দুর্বল। কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড ব্যবহার করুন।';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessageText = 'বৈধ ইমেল বা ফোন নম্বর প্রবেশ করান।';
+                }
+                registrationErrorMessage.innerText = errorMessageText;
+                registrationErrorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

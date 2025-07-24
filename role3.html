@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রায়শই জিজ্ঞাসিত প্রশ্নাবলী - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+        }
+        .header {
+            background-color: #2196F3; /* নীল */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .faq-item {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .faq-question {
+            padding: 15px 20px;
+            background-color: #e3f2fd; /* হালকা নীল */
+            color: #1976D2;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #cce7fa;
+            transition: background-color 0.2s ease;
+        }
+        .faq-question:hover {
+            background-color: #d1ecf9;
+        }
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+        .faq-answer {
+            padding: 15px 20px;
+            background-color: #ffffff;
+            border-top: 1px solid #eee;
+            display: none; /* প্রাথমিকভাবে লুকানো */
+            animation: slideDown 0.3s ease-out;
+        }
+        .faq-answer p {
+            margin: 0;
+            line-height: 1.6;
+            color: #555;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg); /* আইকন ঘোরানো */
+        }
+        .faq-item.active .faq-answer {
+            display: block; /* সক্রিয় হলে দেখানো */
+        }
+
+        /* বটম নেভিগেশন বার - ড্যাশবোর্ড থেকে কপি করা */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        প্রায়শই জিজ্ঞাসিত প্রশ্নাবলী (FAQ)
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>আপনার সব প্রশ্নের উত্তর এখানে খুঁজুন</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>প্রশ্ন ১: কিভাবে আমি রেজিস্ট্রেশন করব?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>আপনি আমাদের হোমপেজে গিয়ে "রেজিস্ট্রেশন" বাটনে ক্লিক করে আপনার ফোন নম্বর এবং পাসওয়ার্ড দিয়ে সহজেই রেজিস্ট্রেশন করতে পারবেন।</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>প্রশ্ন ২: রেজিস্ট্রেশন বোনাস কত?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>নতুন ব্যবহারকারীরা রেজিস্ট্রেশন করার সাথে সাথে ৫০ টাকা ওয়েলকাম বোনাস পাবেন, যা আপনার অ্যাকাউন্টে স্বয়ংক্রিয়ভাবে যোগ হয়ে যাবে।</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>প্রশ্ন ৩: কিভাবে আমি প্ল্যান কিনব?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>লগইন করার পর "প্ল্যানস" সেকশনে যান। সেখানে বিভিন্ন প্ল্যান দেখতে পাবেন। আপনার ব্যালেন্স থেকে মূল্য পরিশোধ করে প্ল্যান কিনতে পারবেন। ফ্রি প্ল্যানও সক্রিয় করতে পারবেন।</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>প্রশ্ন ৪: টাকা ডিপোজিট করব কিভাবে?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>আপনার ড্যাশবোর্ড থেকে "ডিপোজিট" সেকশনে যান। সেখানে বিকাশ, নগদ বা রকেট এর মাধ্যমে টাকা পাঠানোর নির্দেশনা এবং ফর্ম পাবেন। ট্রানজেকশন আইডি সহ ফর্মটি পূরণ করে জমা দিন।</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>প্রশ্ন ৫: কিভাবে আমি টাকা উইথড্র করব?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>আপনার ড্যাশবোর্ড থেকে "উইথড্র" সেকশনে যান। সেখানে আপনার উইথড্র পদ্ধতি এবং পরিমাণ নির্বাচন করুন। আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স থাকলে আপনি উইথড্র রিকোয়েস্ট করতে পারবেন।</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>প্রশ্ন ৬: উইথড্র করতে কত সময় লাগে?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>সাধারণত, উইথড্র রিকোয়েস্ট পর্যালোচনা এবং প্রক্রিয়া করতে ২৪-৪৮ ঘন্টা সময় লাগতে পারে।</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', event => {
+                const parent = item.closest('.faq-item');
+                parent.classList.toggle('active'); // Toggle active class
+            });
+        });
+
+        // Highlight active navigation item (if FAQ is part of bottom nav)
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            // If you add an FAQ button to bottom nav and give it id 'navFaq'
+            // document.getElementById('navFaq').classList.add('active');
+        });
+    </script>
+</body>
+</html>

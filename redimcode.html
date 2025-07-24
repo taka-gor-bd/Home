@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রিডিম কোড - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .balance-display {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .info-message {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+            text-align: left;
+        }
+        .form-group input {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1em;
+            text-align: center;
+            text-transform: uppercase; /* For code input */
+            box-sizing: border-box;
+            outline: none;
+        }
+        .form-group input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+        }
+        button[type="submit"] {
+            background-color: #FFC107; /* হলুদ কমলা */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #ffa000;
+            transform: translateY(-3px);
+        }
+        button[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Redeem History */
+        .history-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 20px;
+        }
+        .history-card h3 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .redeem-history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 0.95em;
+            color: #555;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-item .code {
+            font-weight: 700;
+            color: #333;
+        }
+        .history-item .amount {
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        .history-item .date {
+            font-size: 0.85em;
+            color: #999;
+        }
+        .no-history {
+            color: #777;
+            font-style: italic;
+            padding: 10px 0;
+        }
+
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        রিডিম কোড
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>আপনার রিডিম কোড প্রবেশ করান</h2>
+            <p class="balance-display">আপনার বর্তমান ব্যালেন্স: <span id="userBalance">৳ 0.00</span></p>
+            <p class="info-message">বিশেষ অফার এবং বোনাস পেতে আপনার রিডিম কোডটি এখানে প্রবেশ করান। কোডটি সঠিকভাবে টাইপ করুন!</p>
+
+            <form id="redeemForm">
+                <div class="form-group">
+                    <label for="redeemCode">রিডিম কোড:</label>
+                    <input type="text" id="redeemCode" placeholder="আপনার কোড লিখুন" maxlength="15" required>
+                </div>
+                <button type="submit" id="redeemButton">কোড রিডিম করুন</button>
+            </form>
+        </div>
+
+        <div class="history-card">
+            <h3>আপনার রিডিম হিস্টরি</h3>
+            <ul class="redeem-history-list" id="redeemHistoryList">
+                <p class="no-history">কোনো রিডিম হিস্টরি নেই।</p>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, query, where, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const functions = getFunctions(app, 'asia-southeast1'); // Specify your Cloud Functions region
+
+        // UI Elements
+        const userBalanceSpan = document.getElementById('userBalance');
+        const redeemCodeInput = document.getElementById('redeemCode');
+        const redeemButton = document.getElementById('redeemButton');
+        const redeemHistoryList = document.getElementById('redeemHistoryList');
+
+        let currentUser = null;
+        let currentUserData = null;
+
+        // Cloud Function Callable
+        const redeemCodeCallable = httpsCallable(functions, 'redeemCode');
+
+        // --- Firebase Auth & User Data Loading ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance ? currentUserData.balance.toFixed(2) : '0.00'}`;
+                    loadRedeemHistory(); // Load user's redeem history
+                } else {
+                    alert("আপনার তথ্য লোড করতে সমস্যা হয়েছে।");
+                    window.location.href = 'login.html';
+                }
+            } else {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // --- Redeem Code Submission Logic ---
+        document.getElementById('redeemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const code = redeemCodeInput.value.trim().toUpperCase();
+            if (code === '') {
+                alert('অনুগ্রহ করে একটি রিডিম কোড প্রবেশ করান।');
+                return;
+            }
+
+            redeemButton.disabled = true; // Disable button to prevent multiple submissions
+            redeemButton.innerText = 'রিডিম হচ্ছে...';
+
+            try {
+                // Call Cloud Function to process redeem code
+                const result = await redeemCodeCallable({ code: code });
+
+                if (result.data.success) {
+                    alert(`কোড সফলভাবে রিডিম হয়েছে! আপনি ৳${result.data.bonusAmount.toFixed(2)} বোনাস পেয়েছেন!`);
+                    currentUserData.balance = result.data.newBalance; // Update local balance
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance.toFixed(2)}`;
+                    redeemCodeInput.value = ''; // Clear input
+                    loadRedeemHistory(); // Refresh history
+                } else {
+                    alert(`রিডিম ব্যর্থ: ${result.data.message}`);
+                }
+            } catch (error) {
+                console.error("রিডিম ত্রুটি:", error);
+                alert(`রিডিম করতে সমস্যা হয়েছে: ${error.message}`);
+            } finally {
+                redeemButton.disabled = false;
+                redeemButton.innerText = 'কোড রিডিম করুন';
+            }
+        });
+
+        // --- Load Redeem History ---
+        async function loadRedeemHistory() {
+            if (!currentUser) return; // Ensure user is logged in
+
+            redeemHistoryList.innerHTML = '<p class="no-history">হিস্টরি লোড হচ্ছে...</p>';
+            try {
+                const q = query(
+                    collection(db, "redeemHistories"),
+                    where("userId", "==", currentUser.uid),
+                    orderBy("timestamp", "desc")
+                );
+                const querySnapshot = await getDocs(q);
+
+                redeemHistoryList.innerHTML = ''; // Clear loading message
+
+                if (querySnapshot.empty) {
+                    redeemHistoryList.innerHTML = '<p class="no-history">কোনো রিডিম হিস্টরি নেই।</p>';
+                    return;
+                }
+
+                querySnapshot.forEach(docData => {
+                    const data = docData.data();
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('history-item');
+                    const redeemDate = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('bn-BD', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : 'N/A';
+
+                    listItem.innerHTML = `
+                        <div>
+                            <span class="code">${data.code}</span><br>
+                            <span class="date">${redeemDate}</span>
+                        </div>
+                        <span class="amount">৳ ${data.bonusAmount.toFixed(2)}</span>
+                    `;
+                    redeemHistoryList.appendChild(listItem);
+                });
+
+            } catch (error) {
+                console.error("রিডিম হিস্টরি লোড করতে ত্রুটি:", error);
+                redeemHistoryList.innerHTML = '<p class="no-history" style="color: #dc3545;">হিস্টরি লোড করতে সমস্যা হয়েছে।</p>';
+            }
+        }
+
+        // --- Navigation ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            // If you add a Redeem Code button to bottom nav and give it id 'navRedeem'
+            // document.getElementById('navRedeem').classList.add('active');
+        });
+    </script>
+</body>
+</html>

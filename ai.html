@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>হেল্প সেন্টার - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .chat-container {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto; /* মেসেজ স্ক্রল করার জন্য */
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            scroll-behavior: smooth; /* মসৃণ স্ক্রল */
+        }
+        .message {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            line-height: 1.5;
+            position: relative;
+            font-size: 0.95em;
+        }
+        .message.user .message-bubble {
+            background-color: #2196F3; /* নীল */
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .message.bot .message-bubble {
+            background-color: #e0e0e0; /* ধূসর */
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-input-area {
+            display: flex;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            align-items: center;
+        }
+        .chat-input-area input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .chat-input-area input:focus {
+            border-color: #2196F3;
+        }
+        .chat-input-area button {
+            background-color: #4CAF50; /* সবুজ */
+            color: white;
+            border: none;
+            border-radius: 50%; /* গোলাকার বাটন */
+            width: 45px;
+            height: 45px;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .chat-input-area button:hover {
+            background-color: #45a049;
+            transform: translateY(-1px);
+        }
+        .chat-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        .chat-option-button {
+            background-color: #e3f2fd; /* হালকা নীল */
+            color: #2196F3;
+            border: 1px solid #bbdefb;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .chat-option-button:hover {
+            background-color: #cde7f8;
+            transform: translateY(-2px);
+        }
+        .contact-info {
+            background-color: #fffde7; /* হালকা হলুদ */
+            border: 1px solid #ffecb3;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.95em;
+            color: #795548;
+        }
+        .contact-info a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        হেল্প সেন্টার (AI অ্যাসিস্ট্যান্ট)
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            </div>
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="আপনার প্রশ্ন লিখুন...">
+            <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="chat-options" id="chatOptions">
+            </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // Chatbot Logic
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatOptions = document.getElementById('chatOptions');
+
+        const botResponses = {
+            initial: {
+                message: "নমস্কার! আমি আপনার ইনকাম ওয়েবসাইটের সহায়ক। আপনার কি ধরনের সমস্যা হচ্ছে? নিচে থেকে একটি অপশন নির্বাচন করুন বা আপনার প্রশ্ন টাইপ করুন।",
+                options: ["ডিপোজিট সমস্যা", "উইথড্র সমস্যা", "প্ল্যান সম্পর্কিত প্রশ্ন", "অ্যাকাউন্ট সম্পর্কিত প্রশ্ন", "অন্যান্য"]
+            },
+            deposit_issue: {
+                message: "ডিপোজিট সম্পর্কিত সমস্যার জন্য, অনুগ্রহ করে জানান আপনার ট্রানজেকশন আইডি (Txn ID) কী এবং কতক্ষণ আগে আপনি টাকা পাঠিয়েছেন? আমাদের অ্যাডমিন নম্বর: **01XXXXXXXXX**",
+                options: ["আবার মেনুতে ফিরুন", "যোগাযোগের তথ্য দিন"]
+            },
+            withdraw_issue: {
+                message: "উইথড্র সম্পর্কিত সমস্যার জন্য, অনুগ্রহ করে আপনার উইথড্র রিকোয়েস্ট আইডি এবং কত টাকা উইথড্র করেছেন তা জানান। উইথড্র প্রক্রিয়া সাধারণত ২৪-৪৮ ঘন্টা সময় নেয়।",
+                options: ["আবার মেনুতে ফিরুন", "যোগাযোগের তথ্য দিন"]
+            },
+            plan_query: {
+                message: "আমাদের প্ল্যানগুলো সম্পর্কে জানতে, অনুগ্রহ করে আপনার নির্দিষ্ট প্রশ্নটি করুন। যেমন: 'ফ্রি প্ল্যান কিভাবে কাজ করে?' অথবা 'বেসিক প্ল্যানের মেয়াদ কত?'",
+                options: ["ফ্রি প্ল্যান", "প্ল্যান কিনব কিভাবে?", "আবার মেনুতে ফিরুন"]
+            },
+            account_issue: {
+                message: "অ্যাকাউন্ট সম্পর্কিত সমস্যার জন্য, যেমন পাসওয়ার্ড ভুলে যাওয়া বা অ্যাকাউন্ট ব্লক হওয়া, অনুগ্রহ করে আপনার ফোন নম্বর এবং সমস্যাটি বিস্তারিত জানান।",
+                options: ["পাসওয়ার্ড রিসেট", "অ্যাকাউন্ট ব্লক", "আবার মেনুতে ফিরুন"]
+            },
+            contact_info: {
+                message: "আমাদের অ্যাডমিনদের সাথে সরাসরি যোগাযোগের জন্য নিচে দেওয়া তথ্য ব্যবহার করতে পারেন।\n\n**হোয়াটসঅ্যাপ সাপোর্ট:** [আপনার হোয়াটসঅ্যাপ নম্বর] ([লিঙ্ক](https://wa.me/8801XXXXXXXXX))\n**টেলিগ্রাম গ্রুপ:** [আপনার টেলিগ্রাম গ্রুপ লিংক] ([লিঙ্ক](https://t.me/your_telegram_group))\n**ইমেল:** [আপনার ইমেল আইডি] ([ইমেল](mailto:support@yourwebsite.com))\n\nআমরা সকাল ১০টা থেকে সন্ধ্যা ৬টা পর্যন্ত আপনার সেবায় নিয়োজিত আছি।",
+                options: ["আবার মেনুতে ফিরুন"]
+            },
+            // Specific sub-responses
+            free_plan_details: {
+                message: "ফ্রি প্ল্যানটি ৭ দিনের জন্য বৈধ এবং আপনাকে প্রতিদিন ৳১০ আয় দেবে। এটি প্রতিটি ইউজারের জন্য একবারই সক্রিয় করা যায়।",
+                options: ["প্ল্যান কিনব কিভাবে?", "আবার মেনুতে ফিরুন"]
+            },
+            how_to_buy_plan: {
+                message: "প্ল্যান কেনার জন্য, আপনাকে প্রথমে আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স ডিপোজিট করতে হবে। তারপর 'প্ল্যানস' সেকশনে গিয়ে আপনার পছন্দের প্ল্যানটি নির্বাচন করে 'কিনুন' বাটনে ক্লিক করুন।",
+                options: ["আবার মেনুতে ফিরুন", "যোগাযোগের তথ্য দিন"]
+            },
+            default_response: {
+                message: "আপনার প্রশ্নটি আমার বোঝার বাইরে। অনুগ্রহ করে বিষয়টি আরও স্পষ্ট করুন অথবা নিচের অপশনগুলো থেকে নির্বাচন করুন।",
+                options: ["ডিপোজিট সমস্যা", "উইথড্র সমস্যা", "প্ল্যান সম্পর্কিত প্রশ্ন", "অন্যান্য"]
+            },
+            // Admin contact after user types general issue
+            final_contact: {
+                message: "আপনার সমস্যার জন্য আমরা দুঃখিত। অনুগ্রহ করে আপনার সমস্যাটি বিস্তারিত টাইপ করে জানান। আমাদের দল যত দ্রুত সম্ভব আপনাকে সাহায্য করবে। প্রয়োজনে আপনি সরাসরি আমাদের সাপোর্ট টিমের সাথে এই মাধ্যমে যোগাযোগ করতে পারেন:",
+                contact: {
+                    whatsapp: "আপনার হোয়াটসঅ্যাপ নম্বর (যেমন: 01XXXXXXXXX)",
+                    telegram: "আপনার টেলিগ্রাম গ্রুপ লিঙ্ক",
+                    email: "আপনার সাপোর্ট ইমেল (যেমন: support@yourwebsite.com)"
+                }
+            }
+        };
+
+        // Function to add a message to the chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.classList.add('message-bubble');
+            bubbleDiv.innerText = text; // Use innerText to handle text content safely
+
+            messageDiv.appendChild(bubbleDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+        }
+
+        // Function to display chat options
+        function displayOptions(options) {
+            chatOptions.innerHTML = ''; // Clear previous options
+            options.forEach(optionText => {
+                const button = document.createElement('button');
+                button.classList.add('chat-option-button');
+                button.innerText = optionText;
+                button.addEventListener('click', () => handleOptionClick(optionText));
+                chatOptions.appendChild(button);
+            });
+        }
+
+        // Handle initial bot message
+        function startChat() {
+            addMessage(botResponses.initial.message, 'bot');
+            displayOptions(botResponses.initial.options);
+        }
+
+        // Handle user input
+        sendButton.addEventListener('click', () => {
+            const text = userInput.value.trim();
+            if (text) {
+                addMessage(text, 'user');
+                processUserInput(text);
+                userInput.value = '';
+                chatOptions.innerHTML = ''; // Clear options after user types
+            }
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        // Process user input (simple keyword matching for this AI-like bot)
+        function processUserInput(input) {
+            const lowerInput = input.toLowerCase();
+            let nextResponse = botResponses.default_response;
+
+            if (lowerInput.includes("ডিপোজিট")) {
+                nextResponse = botResponses.deposit_issue;
+            } else if (lowerInput.includes("উইথড্র")) {
+                nextResponse = botResponses.withdraw_issue;
+            } else if (lowerInput.includes("প্ল্যান") || lowerInput.includes("plan")) {
+                nextResponse = botResponses.plan_query;
+            } else if (lowerInput.includes("অ্যাকাউন্ট") || lowerInput.includes("একউন্ট") || lowerInput.includes("password") || lowerInput.includes("পাসওয়ার্ড")) {
+                nextResponse = botResponses.account_issue;
+            } else if (lowerInput.includes("যোগাযোগ") || lowerInput.includes("support") || lowerInput.includes("এডমিন")) {
+                nextResponse = botResponses.contact_info;
+            } else if (lowerInput.includes("ফ্রি প্ল্যান") || lowerInput.includes("free plan")) {
+                 nextResponse = botResponses.free_plan_details;
+            } else if (lowerInput.includes("প্ল্যান কিনব") || lowerInput.includes("buy plan")) {
+                 nextResponse = botResponses.how_to_buy_plan;
+            }
+            // For general questions, provide a generic contact option
+            else if (Object.keys(botResponses).every(key => !lowerInput.includes(key.replace(/_/g, ' ').toLowerCase()))) {
+                addMessage(botResponses.final_contact.message, 'bot');
+                // Display contact info below the message
+                const contactDiv = document.createElement('div');
+                contactDiv.classList.add('contact-info');
+                contactDiv.innerHTML = `
+                    <p>হোয়াটসঅ্যাপ: <a href="https://wa.me/${botResponses.final_contact.contact.whatsapp.replace(/\D/g, '')}" target="_blank">${botResponses.final_contact.contact.whatsapp}</a></p>
+                    <p>টেলিগ্রাম: <a href="${botResponses.final_contact.contact.telegram}" target="_blank">${botResponses.final_contact.contact.telegram}</a></p>
+                    <p>ইমেল: <a href="mailto:${botResponses.final_contact.contact.email}">${botResponses.final_contact.contact.email}</a></p>
+                `;
+                chatMessages.appendChild(contactDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                displayOptions(botResponses.initial.options); // Re-show initial options
+                return; // Exit after displaying contact info
+            }
+
+            // Display bot's response
+            setTimeout(() => { // Simulate typing delay
+                addMessage(nextResponse.message, 'bot');
+                if (nextResponse.options) {
+                    displayOptions(nextResponse.options);
+                } else if (nextResponse.contact) { // Specific contact info for some paths
+                    const contactDiv = document.createElement('div');
+                    contactDiv.classList.add('contact-info');
+                    contactDiv.innerHTML = `
+                        <p>হোয়াটসঅ্যাপ: <a href="https://wa.me/${nextResponse.contact.whatsapp.replace(/\D/g, '')}" target="_blank">${nextResponse.contact.whatsapp}</a></p>
+                        <p>টেলিগ্রাম: <a href="${nextResponse.contact.telegram}" target="_blank">${nextResponse.contact.telegram}</a></p>
+                        <p>ইমেল: <a href="mailto:${nextResponse.contact.email}">${nextResponse.contact.email}</a></p>
+                    `;
+                    chatMessages.appendChild(contactDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    displayOptions(botResponses.initial.options); // Re-show initial options after showing contact
+                }
+            }, 500);
+        }
+
+        // Handle option button clicks
+        function handleOptionClick(optionText) {
+            addMessage(optionText, 'user'); // Show user's choice in chat
+            chatOptions.innerHTML = ''; // Clear options
+
+            let nextResponse;
+            if (optionText === "ডিপোজিট সমস্যা") {
+                nextResponse = botResponses.deposit_issue;
+            } else if (optionText === "উইথড্র সমস্যা") {
+                nextResponse = botResponses.withdraw_issue;
+            } else if (optionText === "প্ল্যান সম্পর্কিত প্রশ্ন") {
+                nextResponse = botResponses.plan_query;
+            } else if (optionText === "অ্যাকাউন্ট সম্পর্কিত প্রশ্ন") {
+                nextResponse = botResponses.account_issue;
+            } else if (optionText === "অন্যান্য") {
+                nextResponse = botResponses.final_contact; // Go directly to final contact for "অন্যান্য"
+            } else if (optionText === "আবার মেনুতে ফিরুন") {
+                nextResponse = botResponses.initial;
+            } else if (optionText === "যোগাযোগের তথ্য দিন") {
+                nextResponse = botResponses.contact_info;
+            } else if (optionText === "ফ্রি প্ল্যান") {
+                nextResponse = botResponses.free_plan_details;
+            } else if (optionText === "প্ল্যান কিনব কিভাবে?") {
+                nextResponse = botResponses.how_to_buy_plan;
+            }
+            // Add more specific option handlers here if needed
+
+            setTimeout(() => {
+                addMessage(nextResponse.message, 'bot');
+                if (nextResponse.options) {
+                    displayOptions(nextResponse.options);
+                } else if (nextResponse.contact) {
+                    const contactDiv = document.createElement('div');
+                    contactDiv.classList.add('contact-info');
+                    contactDiv.innerHTML = `
+                        <p>হোয়াটসঅ্যাপ: <a href="https://wa.me/${nextResponse.contact.whatsapp.replace(/\D/g, '')}" target="_blank">${nextResponse.contact.whatsapp}</a></p>
+                        <p>টেলিগ্রাম: <a href="${nextResponse.contact.telegram}" target="_blank">${nextResponse.contact.telegram}</a></p>
+                        <p>ইমেল: <a href="mailto:${nextResponse.contact.email}">${nextResponse.contact.email}</a></p>
+                    `;
+                    chatMessages.appendChild(contactDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    displayOptions(botResponses.initial.options);
+                }
+            }, 500);
+        }
+
+        // Start the chat when the page loads
+        document.addEventListener('DOMContentLoaded', startChat);
+
+        // Highlight active navigation item (if Help Center is part of bottom nav)
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            // If you add a Help Center button to bottom nav and give it id 'navHelp'
+            // document.getElementById('navHelp').classList.add('active');
+        });
+    </script>
+</body>
+</html>

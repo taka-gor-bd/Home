@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মিশন গেম - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2196F3; /* নীল */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .balance-display {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #4CAF50; /* সবুজ */
+            margin-bottom: 20px;
+        }
+        .game-status-message {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3x3 grid for puzzle */
+            gap: 5px;
+            width: 90%;
+            max-width: 300px;
+            margin: 0 auto 20px auto;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .puzzle-tile {
+            width: 100%;
+            height: 100px; /* Square tiles */
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            font-weight: 700;
+            color: #666;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .puzzle-tile.empty {
+            background-color: #f8f8f8;
+            cursor: default;
+        }
+        .puzzle-tile:not(.empty):hover {
+            background-color: #d0d0d0;
+            transform: scale(1.02);
+        }
+        .game-controls button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .game-controls button:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+        .game-controls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Mission Complete Popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 320px;
+            width: 90%;
+            position: relative;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .popup-content h2 {
+            color: #4CAF50;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        .popup-content p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .popup-content .bonus-amount {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #2196F3; /* নীল */
+            margin: 15px 0;
+        }
+        .popup-content .close-btn {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .popup-content .close-btn:hover {
+            background-color: #1976D2;
+        }
+
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        মিশন গেম
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>আজকের মিশন</h2>
+            <p class="balance-display">আপনার ব্যালেন্স: <span id="userBalance">৳ 0.00</span></p>
+            <p class="game-status-message" id="gameInstruction">সংখ্যাগুলো সঠিক ক্রমে সাজান!</p>
+
+            <div class="game-board" id="gameBoard">
+                </div>
+
+            <div class="game-controls">
+                <button id="startGameButton">মিশন শুরু করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="missionCompletePopup">
+        <div class="popup-content">
+            <h2>মিশন সফল! 🎉</h2>
+            <p>অভিনন্দন! আপনি আজকের মিশন সফলভাবে সম্পন্ন করেছেন!</p>
+            <p>আপনার অ্যাকাউন্টে যুক্ত হয়েছে:</p>
+            <p class="bonus-amount">৳ <span id="missionRewardAmount">0.00</span></p>
+            <button class="close-btn" onclick="closeMissionPopup()">ড্যাশবোর্ড দেখুন</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const functions = getFunctions(app, 'asia-southeast1');
+
+        // UI Elements
+        const userBalanceSpan = document.getElementById('userBalance');
+        const gameInstruction = document.getElementById('gameInstruction');
+        const gameBoard = document.getElementById('gameBoard');
+        const startGameButton = document.getElementById('startGameButton');
+        const missionCompletePopup = document.getElementById('missionCompletePopup');
+        const missionRewardAmount = document.getElementById('missionRewardAmount');
+
+        let currentUser = null;
+        let currentUserData = null;
+        let puzzleTiles = [];
+        let emptyTileIndex = 0;
+        let isGameActive = false;
+        const MISSION_REWARD = 2.00; // Reward for completing the mission
+
+        // Cloud Function Callable (MUST be implemented securely)
+        const completeMissionCallable = httpsCallable(functions, 'completeMission');
+
+        // --- Firebase Auth & User Data Loading ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance ? currentUserData.balance.toFixed(2) : '0.00'}`;
+                    checkMissionStatus(); // Check if mission can be played today
+                } else {
+                    alert("আপনার তথ্য লোড করতে সমস্যা হয়েছে।");
+                    window.location.href = 'login.html';
+                }
+            } else {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // --- Mission Game Logic (15-puzzle style) ---
+        function createBoard() {
+            gameBoard.innerHTML = '';
+            // Generate numbers 1-8 and an empty space (9 for a 3x3 grid)
+            let numbers = Array.from({length: 8}, (_, i) => i + 1);
+            numbers.push(''); // Represent empty tile
+
+            // Shuffle the numbers for a solvable puzzle
+            // A simple shuffle for demonstration, for real solvable 15-puzzle,
+            // ensure inversion count is even for a solvable puzzle
+            for (let i = numbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+            }
+
+            puzzleTiles = [];
+            numbers.forEach((num, index) => {
+                const tile = document.createElement('div');
+                tile.classList.add('puzzle-tile');
+                if (num === '') {
+                    tile.classList.add('empty');
+                    emptyTileIndex = index;
+                }
+                tile.innerText = num;
+                tile.dataset.index = index; // Store current index
+                tile.dataset.value = num; // Store original value
+                tile.addEventListener('click', () => {
+                    if (isGameActive) moveTile(tile);
+                });
+                gameBoard.appendChild(tile);
+                puzzleTiles.push(tile);
+            });
+            gameInstruction.innerText = "সংখ্যাগুলো এলোমেলো। 'মিশন শুরু করুন' বাটনে ক্লিক করে খেলা শুরু করুন।";
+            startGameButton.disabled = false;
+        }
+
+        function moveTile(tile) {
+            const clickedIndex = parseInt(tile.dataset.index);
+            const row = Math.floor(clickedIndex / 3);
+            const col = clickedIndex % 3;
+
+            const emptyRow = Math.floor(emptyTileIndex / 3);
+            const emptyCol = emptyTileIndex % 3;
+
+            // Check if clicked tile is adjacent to empty tile
+            const isAdjacent = 
+                (Math.abs(row - emptyRow) === 1 && col === emptyCol) ||
+                (Math.abs(col - emptyCol) === 1 && row === emptyRow);
+
+            if (isAdjacent) {
+                // Swap elements in the puzzleTiles array (for internal logic)
+                [puzzleTiles[clickedIndex].dataset.value, puzzleTiles[emptyTileIndex].dataset.value] = 
+                [puzzleTiles[emptyTileIndex].dataset.value, puzzleTiles[clickedIndex].dataset.value];
+
+                // Visually update the tiles
+                puzzleTiles[emptyTileIndex].innerText = tile.innerText;
+                puzzleTiles[emptyTileIndex].classList.remove('empty');
+
+                tile.innerText = '';
+                tile.classList.add('empty');
+                
+                emptyTileIndex = clickedIndex; // Update empty tile's index
+
+                // Re-assign data-index based on current DOM position to correctly reflect state
+                // This is simpler for visual update but actual state is managed by emptyTileIndex and dataset.value
+                // A better approach for state management would be to re-render the board
+                // For simplicity of this example, we just swap innerText and classes.
+
+                checkWin();
+            }
+        }
+
+        function checkWin() {
+            // Check if tiles are in order 1, 2, 3, 4, 5, 6, 7, 8, ''
+            let isSolved = true;
+            for (let i = 0; i < puzzleTiles.length - 1; i++) {
+                if (puzzleTiles[i].dataset.value !== (i + 1).toString()) {
+                    isSolved = false;
+                    break;
+                }
+            }
+            // Ensure the last tile is empty or has correct value if not empty (for final check)
+            if (puzzleTiles[puzzleTiles.length - 1].dataset.value !== '') {
+                isSolved = false;
+            }
+
+            if (isSolved) {
+                gameInstruction.innerText = "মিশন সম্পন্ন হয়েছে! পুরস্কার সংগ্রহের জন্য প্রস্তুত।";
+                isGameActive = false;
+                completeMission(); // Call Cloud Function to complete mission and give reward
+            }
+        }
+        
+        // Start Game Button
+        startGameButton.addEventListener('click', () => {
+            isGameActive = true;
+            startGameButton.disabled = true;
+            gameInstruction.innerText = "সংখ্যাগুলো ক্লিক করে সঠিক ক্রমে সাজান!";
+            createBoard(); // Re-shuffle for new game
+        });
+
+
+        // --- Firebase Mission Completion Logic ---
+        async function completeMission() {
+            if (!currentUser || !currentUserData) {
+                alert("লগইন করা নেই বা ব্যবহারকারীর তথ্য লোড হয়নি।");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Check if mission already completed today (client-side check for UX, server will re-verify)
+            const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+            if (currentUserData.lastMissionCompleted === today) {
+                alert('আপনি আজকের মিশনটি ইতিমধ্যেই সম্পন্ন করেছেন। আগামীকাল আবার চেষ্টা করুন।');
+                return;
+            }
+
+            try {
+                // Call Cloud Function to verify and add reward
+                const result = await completeMissionCallable({ rewardAmount: MISSION_REWARD });
+
+                if (result.data.success) {
+                    currentUserData.balance += MISSION_REWARD; // Update local balance
+                    userBalanceSpan.innerText = `৳ ${currentUserData.balance.toFixed(2)}`;
+                    currentUserData.lastMissionCompleted = today; // Mark mission as completed for today
+
+                    missionRewardAmount.innerText = MISSION_REWARD.toFixed(2);
+                    missionCompletePopup.classList.add('active'); // Show popup
+                    checkMissionStatus(); // Update game availability
+                } else {
+                    alert(`মিশন সম্পন্ন ব্যর্থ: ${result.data.message}`);
+                }
+            } catch (error) {
+                console.error("মিশন সম্পন্ন করতে ত্রুটি:", error);
+                alert(`মিশন সম্পন্ন করতে সমস্যা হয়েছে: ${error.message}`);
+            }
+        }
+
+        // Check if user can play mission today
+        function checkMissionStatus() {
+            const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+            if (currentUserData && currentUserData.lastMissionCompleted === today) {
+                startGameButton.disabled = true;
+                gameInstruction.innerText = "আপনি আজকের মিশনটি ইতিমধ্যেই সম্পন্ন করেছেন। আগামীকাল আবার চেষ্টা করুন।";
+            } else {
+                startGameButton.disabled = false;
+                gameInstruction.innerText = "মিশন শুরু করতে 'মিশন শুরু করুন' বাটনে ক্লিক করুন।";
+            }
+        }
+
+        // Close Mission Complete Popup
+        function closeMissionPopup() {
+            missionCompletePopup.classList.remove('active');
+            window.location.href = 'dashboard.html'; // Optionally redirect to dashboard
+        }
+        window.closeMissionPopup = closeMissionPopup; // Make function globally accessible
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            createBoard(); // Create initial, unsolved board
+        });
+
+        // Highlight active navigation item (if Mission Game is part of bottom nav)
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            // If you add a Mission Game button to bottom nav and give it id 'navMissionGame'
+            // document.getElementById('navMissionGame').classList.add('active');
+        });
+    </script>
+</body>
+</html>

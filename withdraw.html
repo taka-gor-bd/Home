@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>উইথড্র - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .balance-info-box { /* নতুন ব্যালেন্স বক্স */
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .balance-info-box .label {
+            font-size: 0.9em; /* ছোট ফন্ট */
+            color: #1976D2;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .balance-info-box .amount {
+            font-size: 2em; /* বড় টাকার পরিমাণ */
+            font-weight: 900;
+            color: #00897b; /* টিল রঙ */
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .form-group input {
+            width: calc(100% - 20px);
+            padding: 10px; /* প্যাডিং কমানো */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95em; /* ফন্ট সাইজ কমানো */
+            box-sizing: border-box;
+            outline: none;
+            height: 40px; /* উচ্চতা কমানো */
+        }
+        .form-group input:focus {
+            border-color: #2196F3;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+        }
+        /* পেমেন্ট মেথড বাটন ডিজাইন */
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 columns side-by-side */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .method-button {
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+        }
+        .method-button.selected {
+            border-color: #E74C3C; /* নির্বাচিত হলে লাল বর্ডার */
+            background-color: #fae6e6;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+        .method-button img {
+            max-width: 50px;
+            height: auto;
+            margin-bottom: 5px;
+        }
+        .method-button p {
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+            font-size: 0.85em;
+        }
+        /* অ্যামাউন্ট সিলেক্ট বাটন */
+        .amount-select-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns for amounts */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .amount-button {
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 50%; /* গোলাকার বাটন */
+            width: 60px; /* গোলাকার সাইজ */
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1em;
+            font-weight: 700;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .amount-button.selected {
+            border-color: #FF5722; /* নির্বাচিত হলে কমলা বর্ডার */
+            background-color: #fff3e0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05); /* নির্বাচিত হলে একটু বড় হবে */
+        }
+        .amount-button:hover:not(.selected) {
+            background-color: #f0f0f0;
+        }
+        button[type="submit"] {
+            background-color: #FF5722;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #e64a19;
+            transform: translateY(-3px);
+        }
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        উইথড্র
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>টাকা উইথড্র করুন</h2>
+            <div class="balance-info-box">
+                <span class="label">আপনার বর্তমান ব্যালেন্স</span>
+                <span class="amount" id="currentBalance">৳ 0.00</span>
+            </div>
+            
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label>উইথড্র পদ্ধতি:</label>
+                    <div class="payment-methods-grid">
+                        <div class="method-button" data-method="bKash">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Bkash_logo.svg/1280px-Bkash_logo.svg.png" alt="bKash">
+                            <p>বিকাশ</p>
+                        </div>
+                        <div class="method-button" data-method="Nagad">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Nagad_Logo.svg/1280px-Nagad_Logo.svg.png" alt="Nagad">
+                            <p>নগদ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">উইথড্র পরিমাণ (সর্বনিম্ন ৳200):</label>
+                    <div class="amount-select-grid">
+                        <div class="amount-button" data-amount="200">৳200</div>
+                        <div class="amount-button" data-amount="500">৳500</div>
+                        <div class="amount-button" data-amount="1000">৳1000</div>
+                        <div class="amount-button" data-amount="2000">৳2000</div>
+                        <div class="amount-button" data-amount="5000">৳5000</div>
+                        <div class="amount-button" data-amount="10000">৳10000</div>
+                    </div>
+                    <input type="number" id="manualAmount" placeholder="অথবা অন্য পরিমাণ" min="200" style="margin-top:10px;">
+                </div>
+
+                <div class="form-group">
+                    <label for="receiverNumber">যে নম্বরে টাকা নিতে চান:</label>
+                    <input type="tel" id="receiverNumber" placeholder="+8801xxxxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">আপনার পাসওয়ার্ড (নিরাপত্তার জন্য):</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">উইথড্র রিকোয়েস্ট পাঠান</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item active" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserData = null; 
+        let selectedWithdrawAmount = 0; // To store selected amount from buttons
+
+        // Load user balance and check auth state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    document.getElementById('currentBalance').innerText = `৳ ${currentUserData.balance ? currentUserData.balance.toFixed(2) : '0.00'}`;
+                } else {
+                    console.error("ইউজার ডেটা খুঁজে পাওয়া যায়নি।");
+                    alert("আপনার তথ্য লোড করতে সমস্যা হয়েছে।");
+                    window.location.href = 'login.html';
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Payment method selection
+        let selectedWithdrawMethod = '';
+        document.querySelectorAll('.method-button').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.method-button').forEach(el => el.classList.remove('selected'));
+                item.classList.add('selected');
+                selectedWithdrawMethod = item.dataset.method;
+            });
+        });
+
+        // Amount selection buttons
+        document.querySelectorAll('.amount-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.amount-button').forEach(el => el.classList.remove('selected'));
+                button.classList.add('selected');
+                selectedWithdrawAmount = parseFloat(button.dataset.amount);
+                document.getElementById('manualAmount').value = ''; // Clear manual input
+            });
+        });
+
+        // Manual amount input behavior
+        document.getElementById('manualAmount').addEventListener('input', () => {
+            // Deselect amount buttons if user types manually
+            document.querySelectorAll('.amount-button').forEach(el => el.classList.remove('selected'));
+            selectedWithdrawAmount = parseFloat(document.getElementById('manualAmount').value) || 0;
+        });
+
+
+        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedWithdrawMethod) {
+                alert('অনুগ্রহ করে একটি উইথড্র পদ্ধতি নির্বাচন করুন।');
+                return;
+            }
+
+            let amountToWithdraw = selectedWithdrawAmount;
+            if (amountToWithdraw === 0 && document.getElementById('manualAmount').value) {
+                amountToWithdraw = parseFloat(document.getElementById('manualAmount').value);
+            }
+            
+            if (isNaN(amountToWithdraw) || amountToWithdraw <= 0) {
+                alert('অনুগ্রহ করে উইথড্র পরিমাণ নির্বাচন করুন বা লিখুন।');
+                return;
+            }
+
+            const receiverNumber = document.getElementById('receiverNumber').value;
+            const password = document.getElementById('password').value;
+
+            const minimumWithdraw = 200; 
+            if (amountToWithdraw < minimumWithdraw) {
+                alert(`সর্বনিম্ন উইথড্র পরিমাণ ৳${minimumWithdraw}।`);
+                return;
+            }
+            if (amountToWithdraw > currentUserData.balance) {
+                alert('আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই।');
+                return;
+            }
+
+            try {
+                // IMPORTANT: Password verification using Cloud Functions for security.
+                // Replace this client-side re-authentication with a secure Cloud Function call.
+                // Example: const isPasswordCorrect = await verifyPasswordCallable({ userId: currentUser.uid, password: password });
+                // if (!isPasswordCorrect.data.success) { alert('আপনার পাসওয়ার্ড সঠিক নয়।'); return; }
+                
+                // For now, client-side re-authentication (less secure)
+                let authIdentifier;
+                if (currentUser.email) { authIdentifier = currentUser.email; }
+                else if (currentUserData.phone) { authIdentifier = `${currentUserData.phone.replace(/\D/g, '')}@yourdomain.com`; }
+                else { alert('আপনার আইডি যাচাই করতে সমস্যা হয়েছে।'); return; }
+                
+                await signInWithEmailAndPassword(auth, authIdentifier, password); 
+
+                // Add withdraw request to Firestore (This should ideally trigger a Cloud Function)
+                await addDoc(collection(db, "withdrawRequests"), {
+                    userId: currentUser.uid,
+                    method: selectedWithdrawMethod,
+                    amount: amountToWithdraw,
+                    receiverNumber: receiverNumber,
+                    status: 'pending', 
+                    timestamp: serverTimestamp()
+                });
+
+                // Crucial: Actual balance deduction should ideally happen on a secured Firebase Cloud Function
+                const userDocRef = doc(db, "users", currentUser.uid);
+                const newBalance = currentUserData.balance - amountToWithdraw;
+                await updateDoc(userDocRef, {
+                    balance: newBalance
+                });
+
+                alert('আপনার উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে। টাকা আপনার অ্যাকাউন্টে শীঘ্রই পাঠানো হবে।');
+                document.getElementById('withdrawForm').reset();
+                document.getElementById('currentBalance').innerText = `৳ ${newBalance.toFixed(2)}`;
+                selectedWithdrawMethod = '';
+                document.querySelectorAll('.method-button').forEach(el => el.classList.remove('selected'));
+                document.querySelectorAll('.amount-button').forEach(el => el.classList.remove('selected')); // Deselect amount buttons
+                selectedWithdrawAmount = 0; // Reset selected amount
+                document.getElementById('manualAmount').value = ''; // Clear manual input
+
+            } catch (error) {
+                console.error("উইথড্র রিকোয়েস্ট বা পাসওয়ার্ড ত্রুটি:", error);
+                let errorMessage = 'উইথড্র রিকোয়েস্ট জমা দিতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+                if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    errorMessage = 'আপনার দেওয়া পাসওয়ার্ড সঠিক নয়।';
+                }
+                alert(errorMessage);
+            }
+        });
+
+        // Highlight active navigation item
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('navWithdraw').classList.add('active');
+        });
+    </script>
+</body>
+</html>

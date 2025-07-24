@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লিডারবোর্ড - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+        }
+        .header {
+            background-color: #2196F3; /* নীল */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #fcfcfc;
+            transition: background-color 0.2s ease;
+        }
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        .leaderboard-item:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .leaderboard-item:hover {
+            background-color: #f5f5f5;
+        }
+        .leaderboard-item .rank {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+            width: 40px;
+            text-align: left;
+        }
+        .leaderboard-item .rank.top-1 { color: #FFD700; } /* Gold */
+        .leaderboard-item .rank.top-2 { color: #C0C0C0; } /* Silver */
+        .leaderboard-item .rank.top-3 { color: #CD7F32; } /* Bronze */
+
+        .leaderboard-item .user-info {
+            flex-grow: 1;
+            text-align: left;
+            margin-left: 15px;
+        }
+        .leaderboard-item .user-name {
+            font-weight: 700;
+            color: #2196F3;
+            font-size: 1.1em;
+            white-space: nowrap; /* Prevent breaking */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis if name is too long */
+        }
+        .leaderboard-item .user-balance {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #4CAF50; /* Green */
+            white-space: nowrap;
+        }
+        /* Top 3 specific styles */
+        .leaderboard-item.top-rank {
+            background-color: #fffde7; /* Lighter yellow background */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .leaderboard-item.top-rank .user-name {
+            font-size: 1.2em;
+        }
+        .leaderboard-item.top-rank .user-balance {
+            font-size: 1.4em;
+        }
+
+        /* বটম নেভিগেশন বার - ড্যাশবোর্ড থেকে কপি করা */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        লিডারবোর্ড
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>শীর্ষ ধনী ইউজাররা</h2>
+            <ul class="leaderboard-list" id="leaderboardList">
+                <p style="text-align: center; color: #777;">লিডারবোর্ড লোড হচ্ছে...</p>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Ensure user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // Load leaderboard data
+        async function loadLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '<p style="text-align: center; color: #777;">লিডারবোর্ড লোড হচ্ছে...</p>';
+
+            try {
+                // Query users collection, order by balance in descending order, limit to top 10 (or desired number)
+                const q = query(collection(db, "users"), orderBy("balance", "desc"), limit(10));
+                const querySnapshot = await getDocs(q);
+
+                leaderboardList.innerHTML = ''; // Clear loading message
+
+                if (querySnapshot.empty) {
+                    leaderboardList.innerHTML = '<p style="text-align: center; color: #777;">কোনো ইউজার ডেটা পাওয়া যায়নি।</p>';
+                    return;
+                }
+
+                let rank = 1;
+                querySnapshot.forEach(docData => {
+                    const user = docData.data();
+                    const userName = user.phone || `ইউজার ${docData.id.substring(0, 6)}`; // Use phone or part of ID
+                    const userBalance = user.balance ? user.balance.toFixed(2) : '0.00';
+
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('leaderboard-item');
+                    if (rank <= 3) {
+                        listItem.classList.add('top-rank');
+                    }
+
+                    let rankClass = '';
+                    if (rank === 1) rankClass = 'top-1';
+                    else if (rank === 2) rankClass = 'top-2';
+                    else if (rank === 3) rankClass = 'top-3';
+
+                    listItem.innerHTML = `
+                        <span class="rank ${rankClass}">${rank}</span>
+                        <div class="user-info">
+                            <span class="user-name">${userName}</span>
+                        </div>
+                        <span class="user-balance">৳ ${userBalance}</span>
+                    `;
+                    leaderboardList.appendChild(listItem);
+                    rank++;
+                });
+
+            } catch (error) {
+                console.error("লিডারবোর্ড লোড করতে ত্রুটি:", error);
+                leaderboardList.innerHTML = '<p style="text-align: center; color: #dc3545;">লিডারবোর্ড লোড করতে সমস্যা হয়েছে।</p>';
+            }
+        }
+
+        // Load leaderboard when page content is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLeaderboard();
+            // Optional: Set up a periodic refresh for the leaderboard
+            // setInterval(loadLeaderboard, 60000); // Refresh every 60 seconds
+        });
+
+        // Highlight active navigation item (if you add leaderboard to bottom nav)
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            // If leaderboard is part of a bottom nav, set its active class here
+            // Example: If you add a 'Leaderboard' button to bottom nav and give it id 'navLeaderboard'
+            // document.getElementById('navLeaderboard').classList.add('active');
+        });
+    </script>
+</body>
+</html>

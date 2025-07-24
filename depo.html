@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডিপোজিট - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .balance-info-box { /* নতুন ব্যালেন্স বক্স */
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .balance-info-box .label {
+            font-size: 0.9em; /* ছোট ফন্ট */
+            color: #1976D2;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .balance-info-box .amount {
+            font-size: 2em; /* বড় টাকার পরিমাণ */
+            font-weight: 900;
+            color: #00897b; /* টিল রঙ */
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .form-group input {
+            width: calc(100% - 20px);
+            padding: 10px; /* প্যাডিং কমানো */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95em; /* ফন্ট সাইজ কমানো */
+            box-sizing: border-box;
+            outline: none;
+            height: 40px; /* উচ্চতা কমানো */
+        }
+        .form-group input:focus {
+            border-color: #2196F3;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+        }
+        /* পেমেন্ট মেথড বাটন ডিজাইন */
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 columns side-by-side */
+            gap: 10px; /* গ্যাপ কমানো */
+            margin-bottom: 20px;
+        }
+        .method-button {
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 10px; /* প্যাডিং কমানো */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* শ্যাডো কমানো */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px; /* বাটনগুলোর উচ্চতা আরও কমানো */
+        }
+        .method-button.selected {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px); /* ট্রানজিশন কমানো */
+        }
+        .method-button img {
+            max-width: 50px; /* লোগোর আকার আরও কমানো */
+            height: auto;
+            margin-bottom: 5px; /* মার্জিন কমানো */
+        }
+        .method-button p {
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+            font-size: 0.85em; /* টেক্সট সাইজ আরও কমানো */
+        }
+        .instructions {
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-left: 5px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .instructions ol {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .instructions ol li {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.9em;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+        /* বটম নেভিগেশন বার */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        ডিপোজিট
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>টাকা ডিপোজিট করুন</h2>
+            
+            <div class="balance-info-box">
+                <span class="label">আপনার বর্তমান ব্যালেন্স</span>
+                <span class="amount" id="userBalance">৳ 0.00</span>
+            </div>
+
+            <div class="instructions">
+                <h3>নির্দেশাবলী:</h3>
+                <ol>
+                    <li>আপনার পছন্দের ডিপোজিট পদ্ধতি নির্বাচন করুন।</li>
+                    <li>নিচের <strong>অফিসিয়াল নম্বরে</strong> আপনার কাঙ্ক্ষিত পরিমাণ টাকা পাঠান (সেন্ড মানি/ক্যাশ ইন)।</li>
+                    <li>টাকা পাঠানোর পর <strong>ট্রানজেকশন আইডি (Txn ID)</strong> সংরক্ষণ করুন।</li>
+                    <li>ডিপোজিট ফর্ম পূরণ করে জমা দিন।</li>
+                    <li>আপনার ডিপোজিট কিছুক্ষণের মধ্যে অনুমোদন করা হবে।</li>
+                </ol>
+                <p style="font-size: 0.9em; color: #777; margin-top:15px; text-align: center;">আমাদের অফিসিয়াল নম্বর: <strong style="color: #2196F3;" id="officialNumber">N/A</strong></p>
+            </div>
+
+            <form id="depositForm">
+                <div class="form-group">
+                    <label>পেমেন্ট পদ্ধতি:</label>
+                    <div class="payment-methods-grid">
+                        <div class="method-button" data-method="bKash">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Bkash_logo.svg/1280px-Bkash_logo.svg.png" alt="bKash">
+                            <p>বিকাশ</p>
+                        </div>
+                        <div class="method-button" data-method="Nagad">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Nagad_Logo.svg/1280px-Nagad_Logo.svg.png" alt="Nagad">
+                            <p>নগদ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">ডিপোজিট পরিমাণ (সর্বনিম্ন ৳100):</label>
+                    <input type="number" id="amount" placeholder="৳ 100" min="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="senderNumber">যে নম্বর থেকে টাকা পাঠিয়েছেন:</label>
+                    <input type="tel" id="senderNumber" placeholder="+8801xxxxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label for="transactionId">ট্রানজেকশন আইডি (Txn ID):</label>
+                    <input type="text" id="transactionId" placeholder="ABC123XYZ789" required>
+                </div>
+                <button type="submit">ডিপোজিট নিশ্চিত করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let selectedMethod = ''; 
+        const officialNumbers = {
+            bKash: '01XXXXXXXXX', // Replace with your actual bKash number
+            Nagad: '01XXXXXXXXX', // Replace with your actual Nagad number
+        };
+
+        // Handle method selection
+        document.querySelectorAll('.method-button').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.method-button').forEach(el => el.classList.remove('selected'));
+                item.classList.add('selected');
+                selectedMethod = item.dataset.method;
+                document.getElementById('officialNumber').innerText = officialNumbers[selectedMethod] || 'N/A';
+            });
+        });
+
+        // Load user balance
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    document.getElementById('userBalance').innerText = `৳ ${userDoc.data().balance ? userDoc.data().balance.toFixed(2) : '0.00'}`;
+                }
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Handle deposit form submission
+        document.getElementById('depositForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedMethod) {
+                alert('অনুগ্রহ করে একটি ডিপোজিট পদ্ধতি নির্বাচন করুন।');
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('amount').value);
+            const senderNumber = document.getElementById('senderNumber').value;
+            const transactionId = document.getElementById('transactionId').value;
+
+            if (amount < 100) {
+                alert('সর্বনিম্ন ডিপোজিট পরিমাণ ৳100।');
+                return;
+            }
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    try {
+                        await addDoc(collection(db, "depositRequests"), {
+                            userId: user.uid,
+                            method: selectedMethod,
+                            amount: amount,
+                            senderNumber: senderNumber,
+                            transactionId: transactionId,
+                            status: 'pending', 
+                            timestamp: serverTimestamp() 
+                        });
+
+                        alert('আপনার ডিপোজিট রিকোয়েস্ট সফলভাবে জমা হয়েছে। অনুগ্রহ করে অনুমোদনের জন্য অপেক্ষা করুন।');
+                        document.getElementById('depositForm').reset(); 
+                        selectedMethod = ''; 
+                        document.getElementById('officialNumber').innerText = 'N/A';
+                        document.querySelectorAll('.method-button').forEach(el => el.classList.remove('selected'));
+
+                    } catch (error) {
+                        console.error("ডিপোজিট রিকোয়েস্ট ত্রুটি:", error);
+                        alert('ডিপোজিট রিকোয়েস্ট জমা দিতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    }
+                } else {
+                    alert('ডিপোজিট করার জন্য আপনাকে লগইন করতে হবে।');
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Highlight active navigation item
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('navWithdraw').classList.add('active'); // General financial section
+        });
+    </script>
+</body>
+</html>
