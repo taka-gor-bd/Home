@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লেনদেন ইতিহাস - আপনার ইনকাম ওয়েবসাইট</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 70px; /* বটম নেভিগেশনের জন্য জায়গা */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header .back-button {
+            position: absolute;
+            left: 20px;
+            color: white;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .section-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-card h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #fcfcfc;
+            transition: background-color 0.2s ease;
+        }
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        .transaction-item:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .transaction-item:hover {
+            background-color: #f5f5f5;
+        }
+        .transaction-info {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .transaction-type {
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1em;
+        }
+        .transaction-date {
+            font-size: 0.85em;
+            color: #999;
+        }
+        .transaction-amount {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #4CAF50; /* সবুজ */
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+        .transaction-amount.negative {
+            color: #E74C3C; /* লাল */
+        }
+        .transaction-status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: white;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .status-pending { background-color: #FFC107; } /* হলুদ */
+        .status-approved, .status-completed, .status-win { background-color: #4CAF50; } /* সবুজ */
+        .status-rejected, .status-lose { background-color: #E74C3C; } /* লাল */
+        .no-transactions {
+            color: #777;
+            font-style: italic;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .loading-message {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        /* বটম নেভিগেশন বার - কমন স্টাইল */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.8em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 1.5em;
+            margin-bottom: 3px;
+        }
+        .nav-item.active {
+            color: #2196F3;
+            transform: translateY(-2px);
+        }
+        .nav-item:hover {
+            color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        লেনদেন ইতিহাস
+    </div>
+
+    <div class="main-content">
+        <div class="section-card">
+            <h2>আপনার সকল কার্যকলাপ</h2>
+            <ul class="transaction-list" id="transactionList">
+                <p class="loading-message">লেনদেন লোড হচ্ছে...</p>
+                </ul>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item" id="navDashboard">
+            <i class="fas fa-home"></i>
+            <span>হোম</span>
+        </a>
+        <a href="transactions.html" class="nav-item active" id="navTransactions">
+            <i class="fas fa-history"></i>
+            <span>লেনদেন</span>
+        </a>
+        <a href="withdraw.html" class="nav-item" id="navWithdraw">
+            <i class="fas fa-wallet"></i>
+            <span>উইথড্র</span>
+        </a>
+        <a href="plans.html" class="nav-item" id="navPlans">
+            <i class="fas fa-clipboard-list"></i>
+            <span>প্ল্যান</span>
+        </a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0nwj-qooOderNiLvmILB-gIPouy2HG4c",
+          authDomain: "takagorbd.firebaseapp.com",
+          databaseURL: "https://takagorbd-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "takagorbd",
+          storageBucket: "takagorbd.firebasestorage.app",
+          messagingSenderId: "531548262665",
+          appId: "1:531548262665:web:85fb34ea635dae7ddc43d8",
+          measurementId: "G-TZB0NHKYGY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // UI Elements
+        const transactionList = document.getElementById('transactionList');
+
+        // --- Firebase Auth & Data Loading ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                loadTransactions(user.uid);
+            } else {
+                window.location.href = 'login.html'; // Redirect to login if not authenticated
+            }
+        });
+
+        // --- Load Transactions ---
+        async function loadTransactions(userId) {
+            transactionList.innerHTML = '<p class="loading-message">লেনদেন লোড হচ্ছে...</p>';
+            try {
+                // Query the 'transactions' collection for this user, ordered by timestamp
+                const q = query(
+                    collection(db, "transactions"),
+                    where("userId", "==", userId),
+                    orderBy("timestamp", "desc")
+                );
+                const querySnapshot = await getDocs(q);
+
+                transactionList.innerHTML = ''; // Clear loading message
+
+                if (querySnapshot.empty) {
+                    transactionList.innerHTML = '<p class="no-transactions">কোনো লেনদেন পাওয়া যায়নি।</p>';
+                    return;
+                }
+
+                querySnapshot.forEach(docData => {
+                    const data = docData.data();
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('transaction-item');
+
+                    const transactionDate = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('bn-BD', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : 'N/A';
+
+                    let amountClass = 'transaction-amount';
+                    // Determine if it's a negative or positive transaction for color coding
+                    if (['withdraw_request', 'plan_purchase', 'donation'].includes(data.type)) {
+                        amountClass += ' negative';
+                    }
+
+                    // Determine status class
+                    let statusClass = 'transaction-status';
+                    let statusText = data.status || '';
+                    if (data.type === 'deposit' || data.type === 'withdraw_request') {
+                        statusClass += ` status-${data.status}`;
+                        // Capitalize first letter for display
+                        statusText = statusText.charAt(0).toUpperCase() + statusText.slice(1);
+                    } else if (data.type === 'lottery_win' || data.type === 'spin_lottery_win' || data.type === 'mission_reward' || data.type === 'redeem_bonus') {
+                        statusClass += ' status-win';
+                        statusText = 'সফল'; // Simplified status for direct rewards
+                    } else if (data.type === 'plan_purchase' || data.type === 'donation') {
+                        statusClass += ' status-approved'; // Can be 'completed'
+                        statusText = 'সম্পন্ন';
+                    } else {
+                        statusClass += ' status-pending'; // Default or unknown
+                        statusText = 'অজানা';
+                    }
+
+                    // Format transaction type for display
+                    let transactionTypeText = '';
+                    switch (data.type) {
+                        case 'deposit': transactionTypeText = 'ডিপোজিট'; break;
+                        case 'withdraw_request': transactionTypeText = 'উইথড্র রিকোয়েস্ট'; break;
+                        case 'withdraw_completed': transactionTypeText = 'উইথড্র সম্পন্ন'; break;
+                        case 'lottery_win': transactionTypeText = 'লটারি জয়'; break;
+                        case 'spin_lottery_win': transactionTypeText = 'স্পিন লটারি জয়'; break;
+                        case 'game_reward': transactionTypeText = 'গেমের আয়'; break;
+                        case 'plan_purchase': transactionTypeText = `প্ল্যান: ${data.planName || 'কেনা'}`; break;
+                        case 'donation': transactionTypeText = 'ডোনেশন'; break;
+                        case 'redeem_bonus': transactionTypeText = 'রিডিম বোনাস'; break;
+                        case 'referral_bonus': transactionTypeText = 'রেফারেল বোনাস'; break;
+                        default: transactionTypeText = 'অন্যান্য লেনদেন';
+                    }
+
+
+                    listItem.innerHTML = `
+                        <div class="transaction-info">
+                            <span class="transaction-type">${transactionTypeText}</span><br>
+                            <span class="transaction-date">${transactionDate}</span>
+                        </div>
+                        <span class="${amountClass}">৳ ${data.amount.toFixed(2)}</span>
+                        <span class="${statusClass}">${statusText}</span>
+                    `;
+                    transactionList.appendChild(listItem);
+                });
+
+            } catch (error) {
+                console.error("লেনদেন লোড করতে ত্রুটি:", error);
+                transactionList.innerHTML = '<p class="no-transactions" style="color: #ff5252;">লেনদেন লোড করতে সমস্যা হয়েছে।</p>';
+            }
+        }
+
+        // Highlight active navigation item
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('navTransactions').classList.add('active');
+        });
+    </script>
+</body>
+</html>
